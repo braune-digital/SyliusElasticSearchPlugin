@@ -42,6 +42,11 @@ final class UpdateProductIndexCommand extends Command
     private $productDocumentFactory;
 
     /**
+     * @var string
+     */
+    private $productDocumentClass;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      * @param Manager $elasticsearchManager
      * @param ProductDocumentFactoryInterface $productDocumentFactory
@@ -49,12 +54,14 @@ final class UpdateProductIndexCommand extends Command
     public function __construct(
         ProductRepositoryInterface $productRepository,
         Manager $elasticsearchManager,
-        ProductDocumentFactoryInterface $productDocumentFactory
+        ProductDocumentFactoryInterface $productDocumentFactory,
+        $productDocumentClass
     ) {
         $this->productRepository = $productRepository;
         $this->elasticsearchManager = $elasticsearchManager;
-        $this->productDocumentRepository = $elasticsearchManager->getRepository(ProductDocument::class);
+        $this->productDocumentClass = $productDocumentClass;
         $this->productDocumentFactory = $productDocumentFactory;
+        $this->productDocumentRepository = $elasticsearchManager->getRepository($productDocumentClass);
 
         parent::__construct('sylius:elastic-search:update-product-index');
     }

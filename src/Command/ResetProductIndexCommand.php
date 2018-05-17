@@ -32,6 +32,11 @@ final class ResetProductIndexCommand extends Command
     private $productDocumentFactory;
 
     /**
+     * @var string
+     */
+    private $productDocumentClass;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      * @param Manager $manager
      * @param ProductDocumentFactoryInterface $productDocumentFactory
@@ -39,11 +44,13 @@ final class ResetProductIndexCommand extends Command
     public function __construct(
         ProductRepositoryInterface $productRepository,
         Manager $manager,
-        ProductDocumentFactoryInterface $productDocumentFactory
+        ProductDocumentFactoryInterface $productDocumentFactory,
+        $productDocumentClass
     ) {
         $this->productRepository = $productRepository;
         $this->elasticsearchManager = $manager;
         $this->productDocumentFactory = $productDocumentFactory;
+        $this->productDocumentClass = $productDocumentClass;
 
         parent::__construct('sylius:elastic-search:reset-product-index');
     }

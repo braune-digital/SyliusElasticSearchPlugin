@@ -22,7 +22,7 @@ use Zend\Stdlib\ArrayObject;
 
 class ProductDocumentFactory implements ProductDocumentFactoryInterface {
     /** @var string */
-    private $productDocumentClass;
+    protected $productDocumentClass;
 
     /** @var AttributeDocumentFactoryInterface */
     private $attributeDocumentFactory;
