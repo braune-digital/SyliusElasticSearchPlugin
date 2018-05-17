@@ -19,6 +19,8 @@ use Sylius\ElasticSearchPlugin\Document\PriceDocument;
 use Sylius\ElasticSearchPlugin\Document\ProductDocument;
 use Sylius\ElasticSearchPlugin\Document\TaxonDocument;
 use Sylius\ElasticSearchPlugin\Document\VariantDocument;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class ProductListViewFactory implements ProductListViewFactoryInterface
 {
@@ -43,6 +45,11 @@ class ProductListViewFactory implements ProductListViewFactoryInterface
     /** @var string */
     protected $taxonViewClass;
 
+    /**
+     * @var PropertyAccessor
+     */
+    protected $pa;
+
     public function __construct(
         string $productListViewClass,
         string $productViewClass,
@@ -59,6 +66,7 @@ class ProductListViewFactory implements ProductListViewFactoryInterface
         $this->imageViewClass = $imageViewClass;
         $this->priceViewClass = $priceViewClass;
         $this->taxonViewClass = $taxonViewClass;
+        $this->pa = PropertyAccess::createPropertyAccessor();
     }
 
     /**
