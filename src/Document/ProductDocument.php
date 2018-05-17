@@ -12,7 +12,7 @@ use ONGR\ElasticsearchBundle\Result\ObjectIterator;
 /**
  * @ElasticSearch\Document(type="product")
  */
-class ProductDocument
+class ProductDocument implements DocumentInterface
 {
     /**
      * @var string

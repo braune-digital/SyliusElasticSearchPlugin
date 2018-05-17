@@ -12,7 +12,7 @@ use ONGR\ElasticsearchBundle\Result\ObjectIterator;
 /**
  * @ElasticSearch\Nested()
  */
-class TaxonDocument
+class TaxonDocument implements DocumentInterface
 {
     /**
      * @var string

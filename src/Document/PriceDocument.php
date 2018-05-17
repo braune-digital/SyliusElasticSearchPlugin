@@ -9,7 +9,7 @@ use ONGR\ElasticsearchBundle\Annotation as ElasticSearch;
 /**
  * @ElasticSearch\Object
  */
-class PriceDocument
+class PriceDocument implements DocumentInterface
 {
     /**
      * @var int

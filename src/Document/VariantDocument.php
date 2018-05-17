@@ -12,7 +12,7 @@ use ONGR\ElasticsearchBundle\Result\ObjectIterator;
 /**
  * @ElasticSearch\Nested
  */
-class VariantDocument
+class VariantDocument implements DocumentInterface
 {
     /**
      * @var mixed

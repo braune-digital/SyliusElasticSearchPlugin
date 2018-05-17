@@ -22,7 +22,7 @@ use Sylius\ElasticSearchPlugin\Document\VariantDocument;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
-class ProductListViewFactory implements ProductListViewFactoryInterface
+class ProductListViewFactory extends BaseViewFactory
 {
     /** @var string */
     protected $productListViewClass;
@@ -45,11 +45,6 @@ class ProductListViewFactory implements ProductListViewFactoryInterface
     /** @var string */
     protected $taxonViewClass;
 
-    /**
-     * @var PropertyAccessor
-     */
-    protected $pa;
-
     public function __construct(
         string $productListViewClass,
         string $productViewClass,
@@ -59,6 +54,7 @@ class ProductListViewFactory implements ProductListViewFactoryInterface
         string $priceViewClass,
         string $taxonViewClass
     ) {
+        parent::__construct();
         $this->productListViewClass = $productListViewClass;
         $this->productViewClass = $productViewClass;
         $this->productVariantViewClass = $productVariantViewClass;
@@ -66,7 +62,6 @@ class ProductListViewFactory implements ProductListViewFactoryInterface
         $this->imageViewClass = $imageViewClass;
         $this->priceViewClass = $priceViewClass;
         $this->taxonViewClass = $taxonViewClass;
-        $this->pa = PropertyAccess::createPropertyAccessor();
     }
 
     /**
@@ -180,15 +175,7 @@ class ProductListViewFactory implements ProductListViewFactoryInterface
     {
         $variantViews = [];
         foreach ($variants as $variant) {
-            /** @var VariantView $variantView */
-            $variantView = new $this->productVariantViewClass();
-            $variantView->id = $variant->getId();
-            $variantView->price = $this->getPriceView($variant->getPrice());
-            $variantView->code = $variant->getCode();
-            $variantView->name = $variant->getName();
-            $variantView->stock = $variant->getStock();
-            $variantView->isTracked = $variant->getIsTracked();
-
+            $variantView = $this->mapDocumentToView($variant, $this->productVariantViewClass, ['images']);
             if ($variant->getImages()->count() > 0) {
                 $variantView->images = $this->getImageViews($variant->getImages());
             }
@@ -205,15 +192,10 @@ class ProductListViewFactory implements ProductListViewFactoryInterface
      */
     protected function getProductView(ProductDocument $product): ProductView
     {
+
         /** @var ProductView $productView */
-        $productView = new $this->productViewClass();
-        $productView->id = $product->getId();
-        $productView->slug = $product->getSlug();
-        $productView->name = $product->getName();
-        $productView->code = $product->getCode();
-        $productView->rating = $product->getAverageReviewRating();
-        $productView->localeCode = $product->getLocaleCode();
-        $productView->channelCode = $product->getChannelCode();
+        $productView = $this->mapDocumentToView($product, $this->productViewClass, ['images', 'taxons', 'attributes', 'variants', 'price', 'mainTaxon']);
+
         if ($product->getImages()->count() > 0) {
             $productView->images = $this->getImageViews($product->getImages());
         }
