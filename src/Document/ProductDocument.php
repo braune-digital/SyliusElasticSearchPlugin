@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Sylius\ElasticSearchPlugin\Document;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use ONGR\ElasticsearchBundle\Annotation as ElasticSearch;
-use ONGR\ElasticsearchBundle\Collection\Collection;
+use ONGR\ElasticsearchBundle\Result\ObjectIterator;
 
 /**
  * @ElasticSearch\Document(type="product")
@@ -101,21 +103,21 @@ class ProductDocument
     protected $mainTaxon;
 
     /**
-     * @var Collection|TaxonDocument[]
+     * @var ObjectIterator|TaxonDocument[]
      *
      * @ElasticSearch\Embedded(class="Sylius\ElasticSearchPlugin\Document\TaxonDocument", multiple=true)
      */
     protected $taxons;
 
     /**
-     * @var Collection
+     * @var ObjectIterator
      *
      * @ElasticSearch\Embedded(class="Sylius\ElasticSearchPlugin\Document\AttributeDocument", multiple=true)
      */
     protected $attributes;
 
     /**
-     * @var Collection
+     * @var ObjectIterator
      *
      * @ElasticSearch\Embedded(class="Sylius\ElasticSearchPlugin\Document\ImageDocument", multiple=true)
      */
@@ -134,7 +136,7 @@ class ProductDocument
     protected $createdAt;
 
     /**
-     * @var Collection
+     * @var ObjectIterator
      *
      * @ElasticSearch\Embedded(class="Sylius\ElasticSearchPlugin\Document\VariantDocument", multiple=true)
      */
@@ -149,10 +151,10 @@ class ProductDocument
 
     public function __construct()
     {
-        $this->attributes = new Collection();
-        $this->taxons = new Collection();
-        $this->images = new Collection();
-        $this->variants = new Collection();
+        $this->attributes = new ArrayCollection();
+        $this->taxons = new ArrayCollection();
+        $this->images = new ArrayCollection();
+        $this->variants = new ArrayCollection();
     }
 
     /**
@@ -348,7 +350,7 @@ class ProductDocument
     }
 
     /**
-     * @return Collection
+     * @return ObjectIterator
      */
     public function getAttributes(): Collection
     {
@@ -356,7 +358,7 @@ class ProductDocument
     }
 
     /**
-     * @param Collection $attributes
+     * @param ObjectIterator $attributes
      */
     public function setAttributes(Collection $attributes): void
     {
@@ -364,7 +366,7 @@ class ProductDocument
     }
 
     /**
-     * @return Collection
+     * @return ObjectIterator
      */
     public function getImages(): Collection
     {
@@ -372,7 +374,7 @@ class ProductDocument
     }
 
     /**
-     * @param Collection $images
+     * @param ObjectIterator $images
      */
     public function setImages(Collection $images): void
     {
@@ -428,7 +430,7 @@ class ProductDocument
     }
 
     /**
-     * @return Collection
+     * @return ObjectIterator
      */
     public function getVariants(): Collection
     {
@@ -436,7 +438,7 @@ class ProductDocument
     }
 
     /**
-     * @param Collection $variants
+     * @param ObjectIterator $variants
      */
     public function setVariants(Collection $variants): void
     {

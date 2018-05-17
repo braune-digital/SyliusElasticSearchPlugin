@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sylius\ElasticSearchPlugin\Factory\Document;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection as DoctrineCollection;
 use ONGR\ElasticsearchBundle\Collection\Collection;
 use Ramsey\Uuid\Uuid;
@@ -19,8 +20,7 @@ use Sylius\ElasticSearchPlugin\Document\ProductDocument;
 use Sylius\ElasticSearchPlugin\Document\TaxonDocument;
 use Zend\Stdlib\ArrayObject;
 
-final class ProductDocumentFactory implements ProductDocumentFactoryInterface
-{
+class ProductDocumentFactory implements ProductDocumentFactoryInterface {
     /** @var string */
     private $productDocumentClass;
 
@@ -145,10 +145,10 @@ final class ProductDocumentFactory implements ProductDocumentFactoryInterface
         $productDocument->setCreatedAt($product->getCreatedAt());
         $productDocument->setSynchronisedAt(new \DateTime('now'));
         $productDocument->setAverageReviewRating($product->getAverageRating());
-        $productDocument->setVariants(new Collection($variantDocuments));
-        $productDocument->setImages(new Collection($imageDocuments));
-        $productDocument->setTaxons(new Collection($taxonDocuments));
-        $productDocument->setAttributes(new Collection($attributeDocuments));
+        $productDocument->setVariants(new ArrayCollection($variantDocuments));
+        $productDocument->setImages(new ArrayCollection($imageDocuments));
+        $productDocument->setTaxons(new ArrayCollection($taxonDocuments));
+        $productDocument->setAttributes(new ArrayCollection($attributeDocuments));
 
         /**
          * Set smallest product variant price, used for search by price
