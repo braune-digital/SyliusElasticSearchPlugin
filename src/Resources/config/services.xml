@@ -28,6 +28,7 @@
         </service>
 
         <service id="sylius_elastic_search.factory.product_list_view" class="%sylius_elastic_search.factory.product_list_view.class%">
+            <argument type="service" id="jms_serializer" />
             <argument>%sylius_elastic_search.view.product_list.class%</argument>
             <argument>%sylius_elastic_search.view.product.class%</argument>
             <argument>%sylius_elastic_search.view.product_variant.class%</argument>

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sylius\ElasticSearchPlugin\Factory\View;
 
 use Doctrine\Common\Collections\Collection;
+use JMS\Serializer\Serializer;
 use ONGR\FilterManagerBundle\Search\SearchResponse;
 use Sylius\ElasticSearchPlugin\Controller\AttributeView;
 use Sylius\ElasticSearchPlugin\Controller\ImageView;
@@ -13,6 +14,7 @@ use Sylius\ElasticSearchPlugin\Controller\ProductListView;
 use Sylius\ElasticSearchPlugin\Controller\ProductView;
 use Sylius\ElasticSearchPlugin\Controller\TaxonView;
 use Sylius\ElasticSearchPlugin\Controller\VariantView;
+use Sylius\ElasticSearchPlugin\Controller\ViewInterface;
 use Sylius\ElasticSearchPlugin\Document\AttributeDocument;
 use Sylius\ElasticSearchPlugin\Document\ImageDocument;
 use Sylius\ElasticSearchPlugin\Document\PriceDocument;
@@ -22,7 +24,7 @@ use Sylius\ElasticSearchPlugin\Document\VariantDocument;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
-class ProductListViewFactory extends BaseViewFactory
+class ProductListViewFactory extends ListViewFactory
 {
     /** @var string */
     protected $productListViewClass;
@@ -46,6 +48,7 @@ class ProductListViewFactory extends BaseViewFactory
     protected $taxonViewClass;
 
     public function __construct(
+        Serializer $serializer,
         string $productListViewClass,
         string $productViewClass,
         string $productVariantViewClass,
@@ -54,7 +57,7 @@ class ProductListViewFactory extends BaseViewFactory
         string $priceViewClass,
         string $taxonViewClass
     ) {
-        parent::__construct();
+        parent::__construct($serializer);
         $this->productListViewClass = $productListViewClass;
         $this->productViewClass = $productViewClass;
         $this->productVariantViewClass = $productVariantViewClass;
@@ -67,20 +70,12 @@ class ProductListViewFactory extends BaseViewFactory
     /**
      * {@inheritdoc}
      */
-    public function createFromSearchResponse(SearchResponse $response): ProductListView
+    public function createFromSearchResponse(SearchResponse $response, $listViewClass): ViewInterface
     {
         $result = $response->getResult();
-        $filters = $response->getFilters();
 
         /** @var ProductListView $productListView */
-        $productListView = new $this->productListViewClass();
-        $productListView->filters = $filters;
-
-        $pager = $filters['paginator']->getSerializableData()['pager'];
-        $productListView->page = $pager['current_page'];
-        $productListView->total = $pager['total_items'];
-        $productListView->pages = $pager['num_pages'];
-        $productListView->limit = $pager['limit'];
+        $productListView = parent::createFromSearchResponse($response, $this->productListViewClass);
 
         /** @var ProductDocument $product */
         foreach ($result as $product) {

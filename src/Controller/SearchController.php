@@ -8,6 +8,7 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\View\ViewHandlerInterface;
 use ONGR\FilterManagerBundle\Search\FilterManagerInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Sylius\ElasticSearchPlugin\Factory\View\ListViewFactoryInterface;
 use Sylius\ElasticSearchPlugin\Factory\View\ProductListViewFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +25,7 @@ final class SearchController
     private $restViewHandler;
 
     /**
-     * @var \Sylius\ElasticSearchPlugin\Factory\View\ProductListViewFactoryInterface
+     * @var ListViewFactoryInterface
      */
     private $productListViewFactory;
 
@@ -40,18 +41,18 @@ final class SearchController
 
     /**
      * @param ViewHandlerInterface $restViewHandler
-     * @param \Sylius\ElasticSearchPlugin\Factory\View\ProductListViewFactoryInterface $productListViewFactory
+     * @param ListViewFactoryInterface $productListViewFactory
      * @param FilterManagerInterface $filterManager
      * @param RepositoryInterface $channelRepository
      */
     public function __construct(
         ViewHandlerInterface $restViewHandler,
-        ProductListViewFactoryInterface $productListViewFactory,
+        ListViewFactoryInterface $listViewFactory,
         FilterManagerInterface $filterManager,
         RepositoryInterface $channelRepository
     ) {
         $this->restViewHandler = $restViewHandler;
-        $this->productListViewFactory = $productListViewFactory;
+        $this->listViewFactory = $listViewFactory;
         $this->filterManager = $filterManager;
         $this->channelRepository = $channelRepository;
     }
@@ -98,7 +99,7 @@ final class SearchController
 
         return $this->restViewHandler->handle(
             View::create(
-                $this->productListViewFactory->createFromSearchResponse($response),
+                $this->slistViewFactory->createFromSearchResponse($response),
                 Response::HTTP_OK
             )
         );
