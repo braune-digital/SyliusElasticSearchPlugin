@@ -7,7 +7,7 @@ namespace Sylius\ElasticSearchPlugin\Factory\Document;
 use Sylius\Component\Core\Model\ImageInterface;
 use Sylius\ElasticSearchPlugin\Document\ImageDocument;
 
-interface ImageDocumentFactoryInterface
+interface ImageDocumentFactoryInterface extends DocumentFactoryInterface
 {
     public function create(ImageInterface $image): ImageDocument;
 }

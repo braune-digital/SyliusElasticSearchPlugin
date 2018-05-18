@@ -8,7 +8,7 @@ use Sylius\Component\Locale\Model\LocaleInterface;
 use Sylius\Component\Product\Model\ProductOptionValueInterface;
 use Sylius\ElasticSearchPlugin\Document\OptionDocument;
 
-interface OptionDocumentFactoryInterface
+interface OptionDocumentFactoryInterface extends DocumentFactoryInterface
 {
     public function create(
         ProductOptionValueInterface $optionValue,

@@ -9,7 +9,7 @@ use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Locale\Model\LocaleInterface;
 use Sylius\ElasticSearchPlugin\Document\ProductDocument;
 
-interface ProductDocumentFactoryInterface
+interface ProductDocumentFactoryInterface extends DocumentFactoryInterface
 {
     /**
      * @param ProductInterface $product

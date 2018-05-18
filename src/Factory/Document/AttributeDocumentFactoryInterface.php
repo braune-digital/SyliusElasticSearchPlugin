@@ -7,7 +7,7 @@ namespace Sylius\ElasticSearchPlugin\Factory\Document;
 use Sylius\Component\Locale\Model\LocaleInterface;
 use Sylius\Component\Product\Model\ProductAttributeValueInterface;
 
-interface AttributeDocumentFactoryInterface
+interface AttributeDocumentFactoryInterface extends DocumentFactoryInterface
 {
     /**
      * @param string|array $data

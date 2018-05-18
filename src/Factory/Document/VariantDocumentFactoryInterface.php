@@ -9,7 +9,7 @@ use Sylius\Component\Core\Model\ProductVariantInterface;
 use Sylius\Component\Locale\Model\LocaleInterface;
 use Sylius\ElasticSearchPlugin\Document\VariantDocument;
 
-interface VariantDocumentFactoryInterface
+interface VariantDocumentFactoryInterface extends DocumentFactoryInterface
 {
     public function create(
         ProductVariantInterface $productVariant,

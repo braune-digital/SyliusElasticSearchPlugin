@@ -8,7 +8,7 @@ use Sylius\Component\Core\Model\TaxonInterface;
 use Sylius\Component\Locale\Model\LocaleInterface;
 use Sylius\ElasticSearchPlugin\Document\TaxonDocument;
 
-interface TaxonDocumentFactoryInterface
+interface TaxonDocumentFactoryInterface extends DocumentFactoryInterface
 {
     public function create(TaxonInterface $taxon, LocaleInterface $localeCode, ?int $position = null): TaxonDocument;
 }
