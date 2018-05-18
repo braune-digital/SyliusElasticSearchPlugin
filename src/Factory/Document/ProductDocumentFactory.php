@@ -240,4 +240,12 @@ class ProductDocumentFactory implements ProductDocumentFactoryInterface {
 
         return $attributeDocuments;
     }
+
+    /**
+     * @param string $productDocumentClass
+     */
+    public function setProductDocumentClass(string $productDocumentClass)
+    {
+        $this->productDocumentClass = $productDocumentClass;
+    }
 }

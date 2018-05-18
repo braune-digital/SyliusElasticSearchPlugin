@@ -45,14 +45,14 @@ class ProductListView implements ViewInterface
     /**
      * @var ProductView[]
      * @Expose
-     * @Groups({"autocomplete", "search"})
+     * @Groups({"search"})
      */
     public $items = [];
 
     /**
      * @var ViewData[]
      * @Expose
-     * @Groups({"autocomplete", "search"})
+     * @Groups({"search"})
      */
     public $filters;
 }
