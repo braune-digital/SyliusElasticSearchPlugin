@@ -17,28 +17,28 @@ class ProductView implements ViewInterface
     /**
      * @var int
      * @Expose
-     * @Groups({"autocomplete"})
+     * @Groups({"autocomplete", "search"})
      */
     public $id;
 
     /**
      * @var string
      * @Expose
-     * @Groups({"autocomplete"})
+     * @Groups({"autocomplete", "search"})
      */
     public $code;
 
     /**
      * @var string
      * @Expose
-     * @Groups({"autocomplete"})
+     * @Groups({"autocomplete", "search"})
      */
     public $name;
 
     /**
      * @var string
      * @Expose
-     * @Groups({"autocomplete"})
+     * @Groups({"autocomplete", "search"})
      */
     public $slug;
 
@@ -47,8 +47,11 @@ class ProductView implements ViewInterface
      */
     public $taxons = [];
 
+
     /**
      * @var array
+     * @Expose
+     * @Groups({"search"})
      */
     public $variants = [];
 
@@ -59,11 +62,15 @@ class ProductView implements ViewInterface
 
     /**
      * @var array
+     * @Expose
+     * @Groups({"search"})
      */
     public $images = [];
 
     /**
      * @var PriceView
+     * @Expose
+     * @Groups({"search"})
      */
     public $price;
 
@@ -79,6 +86,8 @@ class ProductView implements ViewInterface
 
     /**
      * @var array
+     * @Expose
+     * @Groups({"search"})
      */
     public $mainTaxon;
 

@@ -17,42 +17,42 @@ class ProductListView implements ViewInterface
     /**
      * @var int
      * @Expose
-     * @Groups({"autocomplete"})
+     * @Groups({"autocomplete", "search"})
      */
     public $page;
 
     /**
      * @var int
      * @Expose
-     * @Groups({"autocomplete"})
+     * @Groups({"autocomplete", "search"})
      */
     public $limit;
 
     /**
      * @var int
      * @Expose
-     * @Groups({"autocomplete"})
+     * @Groups({"autocomplete", "search"})
      */
     public $total;
 
     /**
      * @var int
      * @Expose
-     * @Groups({"autocomplete"})
+     * @Groups({"autocomplete", "search"})
      */
     public $pages;
 
     /**
      * @var ProductView[]
      * @Expose
-     * @Groups({"autocomplete"})
+     * @Groups({"autocomplete", "search"})
      */
     public $items = [];
 
     /**
      * @var ViewData[]
      * @Expose
-     * @Groups({"autocomplete"})
+     * @Groups({"autocomplete", "search"})
      */
     public $filters;
 }
