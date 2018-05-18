@@ -62,6 +62,10 @@
             <tag name="ongr_filter_manager.filter" type="sylius_elastic_search.in_stock" />
         </service>
 
+        <service id="sylius_elastic_search.filter.geo_distance" class="Sylius\ElasticSearchPlugin\Filter\Widget\GeoDistance">
+            <tag name="ongr_filter_manager.filter" type="sylius_elastic_search.geo_distance" />
+        </service>
+
         <service id="sylius_elastic_search.filter.choice_nested" class="Sylius\ElasticSearchPlugin\Filter\Widget\SingleNestedTermChoice">
             <tag name="ongr_filter_manager.filter" type="sylius_elastic_search.choice_nested" />
         </service>
