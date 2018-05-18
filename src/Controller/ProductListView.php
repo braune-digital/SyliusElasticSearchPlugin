@@ -17,14 +17,14 @@ class ProductListView implements ViewInterface
     /**
      * @var int
      * @Expose
-     * @Groups({"autocomplete", "search"})
+     * @Groups({"search"})
      */
     public $page;
 
     /**
      * @var int
      * @Expose
-     * @Groups({"autocomplete", "search"})
+     * @Groups({"search"})
      */
     public $limit;
 
@@ -38,7 +38,7 @@ class ProductListView implements ViewInterface
     /**
      * @var int
      * @Expose
-     * @Groups({"autocomplete", "search"})
+     * @Groups({"search"})
      */
     public $pages;
 
