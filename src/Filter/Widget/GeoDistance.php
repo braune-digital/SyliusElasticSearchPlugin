@@ -64,12 +64,11 @@ class GeoDistance extends AbstractFilter
             } else {
                 $radius = $this->getOption('radius', 2);
             }
-            $search = new Search();
             $boolQuery = new BoolQuery();
             $boolQuery->add(new MatchAllQuery());
             $geoQuery = new GeoDistanceQuery($field, $radius, $geoPoint);
-            $boolQuery->add($geoQuery, BoolQuery::FILTER);
-            $search->addPostFilter($boolQuery);
+            $boolQuery->add($geoQuery, BoolQuery::MUST);
+            $search->addQuery($boolQuery);
         }
     }
 
