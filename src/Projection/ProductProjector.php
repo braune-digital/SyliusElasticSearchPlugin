@@ -5,88 +5,17 @@ declare(strict_types=1);
 namespace Sylius\ElasticSearchPlugin\Projection;
 
 use ONGR\ElasticsearchBundle\Result\DocumentIterator;
-use ONGR\ElasticsearchBundle\Service\Manager;
-use ONGR\ElasticsearchBundle\Service\Repository;
-use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Locale\Model\LocaleInterface;
-use Sylius\ElasticSearchPlugin\Document\ProductDocument;
-use Sylius\ElasticSearchPlugin\Event\ProductCreated;
-use Sylius\ElasticSearchPlugin\Event\ProductDeleted;
-use Sylius\ElasticSearchPlugin\Event\ProductUpdated;
-use Sylius\ElasticSearchPlugin\Factory\Document\ProductDocumentFactoryInterface;
+use Sylius\Component\Core\Model\ChannelInterface;
+use Sylius\ElasticSearchPlugin\Model\SearchableInterface;
 
-final class ProductProjector
+final class ProductProjector extends Projector
 {
     /**
-     * @var Manager
+     * @param ProductInterface $product
      */
-    private $elasticsearchManager;
-
-    /**
-     * @var Repository
-     */
-    private $productDocumentRepository;
-
-    /**
-     * @var ProductDocumentFactoryInterface
-     */
-    private $productDocumentFactory;
-
-    /**
-     * @param Manager $elasticsearchManager
-     * @param ProductDocumentFactoryInterface $productDocumentFactory
-     */
-    public function __construct(
-        Manager $elasticsearchManager,
-        ProductDocumentFactoryInterface $productDocumentFactory
-    ) {
-        $this->elasticsearchManager = $elasticsearchManager;
-        $this->productDocumentRepository = $elasticsearchManager->getRepository(ProductDocument::class);
-        $this->productDocumentFactory = $productDocumentFactory;
-    }
-
-    /**
-     * @param ProductCreated $event
-     */
-    public function handleProductCreated(ProductCreated $event): void
-    {
-        $this->scheduleCreatingNewProductDocuments($event->product());
-        $this->scheduleRemovingOldProductDocuments($event->product());
-
-        $this->elasticsearchManager->commit();
-    }
-
-    /**
-     * We create a new product documents with updated data and remove old once
-     *
-     * @param ProductUpdated $event
-     */
-    public function handleProductUpdated(ProductUpdated $event): void
-    {
-        $product = $event->product();
-
-        $this->scheduleCreatingNewProductDocuments($product);
-        $this->scheduleRemovingOldProductDocuments($product);
-
-        $this->elasticsearchManager->commit();
-    }
-
-    /**
-     * We remove deleted product
-     *
-     * @param ProductDeleted $event
-     */
-    public function handleProductDeleted(ProductDeleted $event): void
-    {
-        $product = $event->product();
-
-        $this->scheduleRemovingOldProductDocuments($product);
-
-        $this->elasticsearchManager->commit();
-    }
-
-    private function scheduleCreatingNewProductDocuments(ProductInterface $product): void
+    protected function scheduleCreatingNewDocuments(SearchableInterface $product): void
     {
         /** @var ChannelInterface[] $channels */
         $channels = $product->getChannels();
@@ -95,7 +24,7 @@ final class ProductProjector
             $locales = $channel->getLocales();
             foreach ($locales as $locale) {
                 $this->elasticsearchManager->persist(
-                    $this->productDocumentFactory->create(
+                    $this->documentFactory->create(
                         $product,
                         $locale,
                         $channel
@@ -105,13 +34,14 @@ final class ProductProjector
         }
     }
 
-    private function scheduleRemovingOldProductDocuments(ProductInterface $product): void
+    /**
+     * @param SearchableInterface|\Sylius\Component\Product\Model\ProductInterface $entity
+     * @return DocumentIterator
+     */
+    protected function getCurrentDocuments(SearchableInterface $entity): DocumentIterator
     {
-        /** @var DocumentIterator|ProductDocument[] $currentProductDocuments */
-        $currentProductDocuments = $this->productDocumentRepository->findBy(['code' => $product->getCode()]);
-
-        foreach ($currentProductDocuments as $sameCodeProductDocument) {
-            $this->elasticsearchManager->remove($sameCodeProductDocument);
-        }
+        return $this->documentRepository->findBy(['code' => $entity->getCode()]);
     }
+
+
 }

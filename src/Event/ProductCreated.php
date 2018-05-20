@@ -4,38 +4,19 @@ declare(strict_types=1);
 
 namespace Sylius\ElasticSearchPlugin\Event;
 
-use Sylius\Component\Core\Model\ProductInterface;
 
-final class ProductCreated
-{
-    /**
-     * @var ProductInterface
-     */
-    private $product;
+use Sylius\ElasticSearchPlugin\Model\SearchableInterface;
 
-    /**
-     * @param ProductInterface $product
-     */
-    private function __construct(ProductInterface $product)
-    {
-        $this->product = $product;
-    }
+class ProductCreated extends Created {
+
 
     /**
      * @param ProductInterface $product
      *
      * @return self
      */
-    public static function occur(ProductInterface $product)
+    public static function occur(SearchableInterface $entity)
     {
-        return new self($product);
-    }
-
-    /**
-     * @return ProductInterface
-     */
-    public function product(): ProductInterface
-    {
-        return $this->product;
+        return new self($entity);
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Sylius\ElasticSearchPlugin\EventListener;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use SimpleBus\Message\Bus\MessageBus;
@@ -19,7 +21,7 @@ use Sylius\ElasticSearchPlugin\Event\ProductCreated;
 use Sylius\ElasticSearchPlugin\Event\ProductDeleted;
 use Sylius\ElasticSearchPlugin\Event\ProductUpdated;
 
-final class ProductPublisher
+class ProductPublisher
 {
     /**
      * @var MessageBus
@@ -62,18 +64,22 @@ final class ProductPublisher
 
                 continue;
             }
-
-            $entity = $this->getProductFromEntity($entity);
-            if ($entity instanceof ProductInterface && !isset($this->scheduledUpdates[$entity->getCode()])) {
-                $this->scheduledUpdates[$entity->getCode()] = $entity;
+            $entities = $this->getProductFromEntity($entity);
+            foreach ($entities as $entity) {
+                if ($entity instanceof ProductInterface && !isset($this->scheduledUpdates[$entity->getCode()])) {
+                    $this->scheduledUpdates[$entity->getCode()] = $entity;
+                }
             }
         }
 
         $scheduledUpdates = $event->getEntityManager()->getUnitOfWork()->getScheduledEntityUpdates();
         foreach ($scheduledUpdates as $entity) {
-            $entity = $this->getProductFromEntity($entity);
-            if ($entity instanceof ProductInterface && !isset($this->scheduledUpdates[$entity->getCode()])) {
-                $this->scheduledUpdates[$entity->getCode()] = $entity;
+
+            $entities = $this->getProductFromEntity($entity);
+            foreach ($entities as $entity) {
+                if ($entity instanceof ProductInterface && !isset($this->scheduledUpdates[$entity->getCode()])) {
+                    $this->scheduledUpdates[$entity->getCode()] = $entity;
+                }
             }
         }
 
@@ -85,9 +91,12 @@ final class ProductPublisher
                 continue;
             }
 
-            $entity = $this->getProductFromEntity($entity);
-            if ($entity instanceof ProductInterface && !isset($this->scheduledUpdates[$entity->getCode()])) {
-                $this->scheduledUpdates[$entity->getCode()] = $entity;
+            $entities = $this->getProductFromEntity($entity);
+            foreach ($entities as $entity) {
+                if ($entity instanceof ProductInterface && !isset($this->scheduledUpdates[$entity->getCode()])) {
+                    $this->scheduledUpdates[$entity->getCode()] = $entity;
+                }
+
             }
         }
     }
@@ -124,10 +133,10 @@ final class ProductPublisher
      *
      * @return ProductInterface|null
      */
-    private function getProductFromEntity($entity): ?ProductInterface
+    protected function getProductFromEntity($entity): ?Collection
     {
         if ($entity instanceof ProductInterface) {
-            return $entity;
+            return new ArrayCollection([$entity]);
         }
 
         if ($entity instanceof ProductTranslationInterface) {
@@ -158,6 +167,6 @@ final class ProductPublisher
             return $this->getProductFromEntity($entity->getOwner());
         }
 
-        return null;
+        return new ArrayCollection();
     }
 }
