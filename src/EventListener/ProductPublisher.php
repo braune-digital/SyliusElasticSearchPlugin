@@ -133,7 +133,7 @@ class ProductPublisher
      *
      * @return ProductInterface|null
      */
-    protected function getProductFromEntity($entity): ?Collection
+    protected function getProductFromEntity($entity)
     {
         if ($entity instanceof ProductInterface) {
             return new ArrayCollection([$entity]);
