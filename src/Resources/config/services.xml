@@ -72,5 +72,9 @@
             <tag name="ongr_filter_manager.filter" type="sylius_elastic_search.choice_nested" />
         </service>
 
+        <service id="sylius_elastic_search.filter.choice" class="Sylius\ElasticSearchPlugin\Filter\Widget\SingleTermChoice">
+            <tag name="ongr_filter_manager.filter" type="sylius_elastic_search.choice" />
+        </service>
+
     </services>
 </container>
