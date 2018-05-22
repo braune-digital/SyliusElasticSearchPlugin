@@ -107,13 +107,13 @@ class ProductDocumentFactory implements ProductDocumentFactoryInterface {
         /** @var ImageDocument[] $imageDocuments */
         $imageDocuments = [];
         foreach ($product->getImages() as $productImage) {
+            $imageDocuments[] = $this->imageDocumentFactory->create($productImage);
             foreach ($productVariants as $variant) {
-                if ($variant->hasImage($productImage)) {
-                    continue 2;
+                foreach ($variant->getImages() as $image) {
+                    $imageDocuments[] = $this->imageDocumentFactory->create($image);
                 }
             }
 
-            $imageDocuments[] = $this->imageDocumentFactory->create($productImage);
         }
 
         /** @var TaxonDocument[] $taxonDocuments */
