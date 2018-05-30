@@ -20,6 +20,7 @@ use Sylius\Component\Product\Model\ProductVariantTranslationInterface;
 use Sylius\ElasticSearchPlugin\Event\ProductCreated;
 use Sylius\ElasticSearchPlugin\Event\ProductDeleted;
 use Sylius\ElasticSearchPlugin\Event\ProductUpdated;
+use Sylius\ElasticSearchPlugin\Model\IndexableInterface;
 
 class ProductPublisher
 {
@@ -58,15 +59,16 @@ class ProductPublisher
     {
         $scheduledInsertions = $event->getEntityManager()->getUnitOfWork()->getScheduledEntityInsertions();
 
+        /** @var IndexableInterface $entity */
         foreach ($scheduledInsertions as $entity) {
-            if ($entity instanceof ProductInterface && !isset($this->scheduledInsertions[$entity->getCode()])) {
+            if ($entity instanceof ProductInterface && $entity->isIndexable() && !isset($this->scheduledInsertions[$entity->getCode()])) {
                 $this->scheduledInsertions[$entity->getCode()] = $entity;
 
                 continue;
             }
             $entities = $this->getProductFromEntity($entity);
             foreach ($entities as $entity) {
-                if ($entity instanceof ProductInterface && !isset($this->scheduledUpdates[$entity->getCode()])) {
+                if ($entity instanceof ProductInterface && $entity->isIndexable() && !isset($this->scheduledUpdates[$entity->getCode()])) {
                     $this->scheduledUpdates[$entity->getCode()] = $entity;
                 }
             }
@@ -77,7 +79,7 @@ class ProductPublisher
 
             $entities = $this->getProductFromEntity($entity);
             foreach ($entities as $entity) {
-                if ($entity instanceof ProductInterface && !isset($this->scheduledUpdates[$entity->getCode()])) {
+                if ($entity instanceof ProductInterface && $entity->isIndexable() && !isset($this->scheduledUpdates[$entity->getCode()])) {
                     $this->scheduledUpdates[$entity->getCode()] = $entity;
                 }
             }
