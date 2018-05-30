@@ -144,7 +144,7 @@ class ProductPublisher
         }
 
         if ($entity instanceof ProductVariantInterface) {
-            return $entity->getProduct();
+            return new ArrayCollection([$entity->getProduct()]);
         }
 
         if ($entity instanceof ProductVariantTranslationInterface) {
