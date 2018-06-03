@@ -47,11 +47,10 @@ class ListViewFactory implements ListViewFactoryInterface {
      * @param SearchResponse $response
      * @param string $entityClass
      * @param string $identifierProperty
-     * @param string|null $path
      * @return ViewInterface
      * @throws \Exception
      */
-    public function createFromSearchResponse(SearchResponse $response, string $entityClass, string $identifierProperty, string $path = null): ViewInterface
+    public function createFromSearchResponse(SearchResponse $response, string $entityClass, string $identifierProperty): ViewInterface
     {
         $repository = $this->em->getRepository($entityClass);
 
@@ -71,9 +70,6 @@ class ListViewFactory implements ListViewFactoryInterface {
         /** @var DocumentIterator $result */
         foreach ($response->getResult() as $result) {
             $document = $result;
-            if ($path && $path !== '') {
-                $document = $this->pa->getValue($result, $path);
-            }
             if (!$this->pa->isReadable($document, $identifierProperty)) {
                 throw new \Exception("The identifier property of the document could not be read.");
             }

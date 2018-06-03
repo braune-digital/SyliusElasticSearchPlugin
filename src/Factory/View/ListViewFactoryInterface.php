@@ -14,8 +14,7 @@ interface ListViewFactoryInterface
      * @param SearchResponse $response
      * @param string $entityClass
      * @param string $identifierProperty
-     * @param string|null $path
      * @return ViewInterface
      */
-    public function createFromSearchResponse(SearchResponse $response, string $entityClass, string $identifierProperty, string $path = null): ViewInterface;
+    public function createFromSearchResponse(SearchResponse $response, string $entityClass, string $identifierProperty): ViewInterface;
 }
