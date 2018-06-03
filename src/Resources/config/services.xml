@@ -8,9 +8,8 @@
     </imports>
 
     <parameters>
-        <parameter key="sylius_elastic_search.factory.product_list_view.class">Sylius\ElasticSearchPlugin\Factory\View\ProductListViewFactory</parameter>
+        <parameter key="sylius_elastic_search.factory.list_view.class">Sylius\ElasticSearchPlugin\Factory\View\ListViewFactory</parameter>
         <parameter key="sylius_elastic_search.event_listener.class">Sylius\ElasticSearchPlugin\EventListener\ProductPublisher</parameter>
-        <parameter key="sylius_elastic_search.transformer.result_transformer.class">Sylius\ElasticSearchPlugin\Transformer\ResultTransformer</parameter>
     </parameters>
 
     <services>
@@ -30,20 +29,9 @@
             <tag name="event_subscriber" subscribes_to="Sylius\ElasticSearchPlugin\Event\ProductDeleted" method="handleDeleted" />
         </service>
 
-        <service id="sylius_elastic_search.factory.product_list_view" class="%sylius_elastic_search.factory.product_list_view.class%">
+        <service id="sylius_elastic_search.factory.list_view" class="%sylius_elastic_search.factory.list_view.class%">
+            <argument type="service" id="doctrine.orm.default_entity_manager" />
             <argument type="service" id="jms_serializer" />
-            <argument>%sylius_elastic_search.view.product_list.class%</argument>
-            <argument>%sylius_elastic_search.view.product.class%</argument>
-            <argument>%sylius_elastic_search.view.product_variant.class%</argument>
-            <argument>%sylius_elastic_search.view.attribute.class%</argument>
-            <argument>%sylius_elastic_search.view.image.class%</argument>
-            <argument>%sylius_elastic_search.view.price.class%</argument>
-            <argument>%sylius_elastic_search.view.taxon.class%</argument>
-        </service>
-
-        <service id="sylius_elastic_search.transformer.result_transformer" class="%sylius_elastic_search.transformer.result_transformer.class%">
-            <argument type="service" id="service_container" />
-            <argument type="service" id="request_stack" />
         </service>
 
         <service id="sylius_elastic_search.filter.pager" class="Sylius\ElasticSearchPlugin\Filter\Widget\Pager">

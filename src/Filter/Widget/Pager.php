@@ -50,11 +50,7 @@ final class Pager extends AbstractFilter implements ViewDataFactoryInterface
      */
     public function modifySearch(Search $search, ?FilterState $state = null, ?SearchRequest $request = null): void
     {
-        if ($state && $state->isActive()) {
-            $search->setFrom($this->getCountPerPage($state) * ($state->getValue() - 1));
-        }
-
-        $search->setSize($this->getCountPerPage($state));
+        $this->setPaginationOptions($search, $state);
     }
 
     /**
@@ -62,7 +58,19 @@ final class Pager extends AbstractFilter implements ViewDataFactoryInterface
      */
     public function preProcessSearch(Search $search, Search $relatedSearch, ?FilterState $state = null)
     {
-        // Nothing to do here.
+        $this->setPaginationOptions($search, $state);
+    }
+
+    /**
+     * @param Search $search
+     * @param null|FilterState $state
+     */
+    private function setPaginationOptions(Search $search, ?FilterState $state = null) {
+        if ($state && $state->isActive()) {
+            $search->setFrom($this->getCountPerPage($state) * ($state->getValue() - 1));
+        }
+
+        $search->setSize($this->getCountPerPage($state));
     }
 
     /**

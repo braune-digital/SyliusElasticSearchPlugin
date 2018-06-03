@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Sylius\ElasticSearchPlugin\Factory\View;
 
+use Doctrine\ORM\EntityManager;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\Serializer;
+use ONGR\ElasticsearchBundle\Result\DocumentIterator;
 use ONGR\FilterManagerBundle\Search\SearchResponse;
-use Sylius\ElasticSearchPlugin\Controller\ViewInterface;
+use Sylius\ElasticSearchPlugin\View\ViewInterface;
 use Sylius\ElasticSearchPlugin\Document\DocumentInterface;
+use Sylius\ElasticSearchPlugin\View\ListView;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
-abstract class ListViewFactory implements ListViewFactoryInterface
-{
+class ListViewFactory implements ListViewFactoryInterface {
 
     /**
      * @var PropertyAccessor
@@ -26,57 +28,62 @@ abstract class ListViewFactory implements ListViewFactoryInterface
     protected $serializer;
 
     /**
+     * @var EntityManager
+     */
+    protected $em;
+
+    /**
      * ListViewFactory constructor.
      * @param Serializer $serializer
      */
-    public function __construct(Serializer $serializer)
+    public function __construct(EntityManager $em, Serializer $serializer)
     {
+        $this->em = $em;
         $this->serializer = $serializer;
         $this->pa = PropertyAccess::createPropertyAccessor();
     }
 
-
     /**
-     * {@inheritdoc}
+     * @param SearchResponse $response
+     * @param string $entityClass
+     * @param string $identifierProperty
+     * @param string|null $path
+     * @return ViewInterface
+     * @throws \Exception
      */
-    public function createFromSearchResponse(SearchResponse $response, $listViewClass): ViewInterface
+    public function createFromSearchResponse(SearchResponse $response, string $entityClass, string $identifierProperty, string $path = null): ViewInterface
     {
+        $repository = $this->em->getRepository($entityClass);
+
         $result = $response->getResult();
         $filters = $response->getFilters();
 
-        $listView = new $listViewClass();
-        $listView->filters = $this->serializer->toArray($filters, SerializationContext::create());
+        $listView = new ListView();
+
+        $listView->setFilters($this->serializer->toArray($filters, SerializationContext::create()));
 
         $pager = $filters['paginator']->getSerializableData()['pager'];
-        $listView->page = $pager['current_page'];
-        $listView->total = $pager['total_items'];
-        $listView->pages = $pager['num_pages'];
-        $listView->limit = $pager['limit'];
-        return $listView;
-    }
+        $listView->setPage($pager['current_page']);
+        $listView->setTotal($pager['total_items']);
+        $listView->setPages($pager['num_pages']);
+        $listView->setLimit($pager['limit']);
 
-    /**
-     * @param DocumentInterface $document
-     * @param $viewClass
-     * @return mixed
-     */
-    protected function mapDocumentToView(DocumentInterface $document, $viewClass, array $exclude = []) {
-
-        $view = new $viewClass();
-        $reflect = new \ReflectionClass($view);
-        /** @var \ReflectionProperty $reflectionProperty */
-        $reflectionProperties = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
-        foreach ($reflectionProperties as $reflectionProperty) {
-            $property = $reflectionProperty->getName();
-            if (in_array($property, $exclude)) {
-                continue;
+        /** @var DocumentIterator $result */
+        foreach ($response->getResult() as $result) {
+            $document = $result;
+            if ($path && $path !== '') {
+                $document = $this->pa->getValue($result, $path);
             }
-            if ($this->pa->isReadable($document, $property) && $this->pa->isWritable($view, $property)) {
-                $this->pa->setValue($view, $property, $this->pa->getValue($document, $property));
+            if (!$this->pa->isReadable($document, $identifierProperty)) {
+                throw new \Exception("The identifier property of the document could not be read.");
+            }
+            $entity = $repository->find($this->pa->getValue($document, $identifierProperty));
+            if ($entity) {
+                $listView->addItem($entity);
             }
         }
-        return $view;
-    }
 
+        return $listView;
+    }
 
 }

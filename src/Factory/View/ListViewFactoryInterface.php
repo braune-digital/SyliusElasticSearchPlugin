@@ -6,14 +6,16 @@ namespace Sylius\ElasticSearchPlugin\Factory\View;
 
 use ONGR\FilterManagerBundle\Search\SearchResponse;
 use Sylius\ElasticSearchPlugin\Controller\ProductListView;
-use Sylius\ElasticSearchPlugin\Controller\ViewInterface;
+use Sylius\ElasticSearchPlugin\View\ViewInterface;
 
 interface ListViewFactoryInterface
 {
     /**
      * @param SearchResponse $response
-     *
-     * @return ProductListView
+     * @param string $entityClass
+     * @param string $identifierProperty
+     * @param string|null $path
+     * @return ViewInterface
      */
-    public function createFromSearchResponse(SearchResponse $response, $listViewClass): ViewInterface;
+    public function createFromSearchResponse(SearchResponse $response, string $entityClass, string $identifierProperty, string $path = null): ViewInterface;
 }
