@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sylius\ElasticSearchPlugin\Factory\View;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\Serializer;
@@ -67,16 +68,11 @@ class ListViewFactory implements ListViewFactoryInterface {
         $listView->setPages($pager['num_pages']);
         $listView->setLimit($pager['limit']);
 
+        $raw = $response->getResult()->getRaw();
+
         /** @var DocumentIterator $result */
         foreach ($response->getResult() as $result) {
-            $document = $result;
-            if (!$this->pa->isReadable($document, $identifierProperty)) {
-                throw new \Exception("The identifier property of the document could not be read.");
-            }
-            $entity = $repository->find($this->pa->getValue($document, $identifierProperty));
-            if ($entity) {
-                $listView->addItem($entity);
-            }
+            $listView->addItem($result);
         }
 
         return $listView;
