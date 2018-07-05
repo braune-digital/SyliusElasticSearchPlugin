@@ -85,6 +85,9 @@ class ProductDocumentFactory implements ProductDocumentFactoryInterface {
         LocaleInterface $locale,
         ChannelInterface $channel
     ): ProductDocument {
+
+
+
         /** @var ProductVariantInterface[] $productVariants */
         $productVariants = $product->getVariants()->filter(function (ProductVariantInterface $productVariant) use ($channel): bool {
             return $productVariant->hasChannelPricingForChannel($channel);
@@ -178,6 +181,8 @@ class ProductDocumentFactory implements ProductDocumentFactoryInterface {
     private function getMinimalPriceFromVariants($variants, ChannelInterface $channel): ChannelPricingInterface
     {
         /** @var ChannelPricingInterface $minProductChannelPrice */
+
+
         $minProductChannelPrice = $variants->first()->getChannelPricingForChannel($channel);
 
         foreach ($variants as $variant) {

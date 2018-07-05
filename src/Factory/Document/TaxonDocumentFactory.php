@@ -41,6 +41,7 @@ final class TaxonDocumentFactory implements TaxonDocumentFactoryInterface
         $taxonDocument = new $this->taxonDocumentClass();
         $taxonDocument->setCode($taxon->getCode());
         $taxonDocument->setSlug($taxonTranslation->getSlug());
+        $taxonDocument->setName($taxonTranslation->getName());
         if (is_int($position)) {
             $taxonDocument->setPosition($position);
         } else {

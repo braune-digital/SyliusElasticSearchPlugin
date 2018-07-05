@@ -29,6 +29,13 @@ class TaxonDocument implements DocumentInterface
     protected $slug;
 
     /**
+     * @var string
+     *
+     * @ElasticSearch\Property(type="keyword")
+     */
+    protected $name;
+
+    /**
      * @var int
      *
      * @ElasticSearch\Property(type="integer")
@@ -133,4 +140,20 @@ class TaxonDocument implements DocumentInterface
     {
         $this->description = $description;
     }
+
+    /**
+     * @return string
+     */
+    public function getName(): string {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void {
+        $this->name = $name;
+    }
+
+
 }
