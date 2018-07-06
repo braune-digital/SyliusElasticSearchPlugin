@@ -56,4 +56,11 @@ class ImageDocument implements DocumentInterface
     {
         $this->path = $path;
     }
+
+    /**
+     * @return null|string
+     */
+    public function getType() {
+        return $this->getCode();
+    }
 }

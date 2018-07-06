@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use ONGR\ElasticsearchBundle\Annotation as ElasticSearch;
 use ONGR\ElasticsearchBundle\Result\ObjectIterator;
+use Sylius\ElasticSearchPlugin\Document\ImageDocument;
 use Sylius\ElasticSearchPlugin\Document\PriceDocument;
 use Sylius\ElasticSearchPlugin\Document\TaxonDocument;
 
@@ -442,5 +443,15 @@ trait ProductDocumentTrait
     public function setVariants(Collection $variants): void
     {
         $this->variants = $variants;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getImagesByType(string $type): Collection
+    {
+        return $this->images->filter(function (ImageDocument $image) use ($type): bool {
+            return $type === $image->getCode();
+        });
     }
 }
