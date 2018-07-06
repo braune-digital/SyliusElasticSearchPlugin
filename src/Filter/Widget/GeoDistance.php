@@ -79,7 +79,7 @@ class GeoDistance extends AbstractFilter
 
     public function getViewData(DocumentIterator $result, ViewData $data)
     {
-        // TODO: Implement getViewData() method.
+        return $data;
     }
 
 }
