@@ -23,7 +23,7 @@ class MultiNestedTermChoice extends MultiTermChoice
     /**
      * {@inheritdoc}
      */
-    public function modifySearch(Search $search, FilterState $state = null, SearchRequest $request = null, $postFilter = false)
+    public function modifySearch(Search $search, FilterState $state = null, SearchRequest $request = null)
     {
         if ($state && $state->isActive()) {
 
@@ -38,6 +38,7 @@ class MultiNestedTermChoice extends MultiTermChoice
             }
 
             [$path, $field] = explode('>', $this->getDocumentField());
+            $postFilter = $this->getOption('postFilter', false);
             $method = ($postFilter) ? 'addPostFilter' : 'addQuery';
 
             $search->$method(
