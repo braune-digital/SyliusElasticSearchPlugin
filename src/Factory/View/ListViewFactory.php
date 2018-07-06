@@ -51,29 +51,25 @@ class ListViewFactory implements ListViewFactoryInterface {
      * @return ViewInterface
      * @throws \Exception
      */
-    public function createFromSearchResponse(SearchResponse $response, string $entityClass, string $identifierProperty): ViewInterface
+    public function createFromSearchResponse(SearchResponse $response): ViewInterface
     {
-        $repository = $this->em->getRepository($entityClass);
 
         $result = $response->getResult();
         $filters = $response->getFilters();
 
         $listView = new ListView();
-
         $listView->setFilters($this->serializer->toArray($filters, SerializationContext::create()));
-
         $pager = $filters['paginator']->getSerializableData()['pager'];
         $listView->setPage($pager['current_page']);
         $listView->setTotal($pager['total_items']);
         $listView->setPages($pager['num_pages']);
         $listView->setLimit($pager['limit']);
 
-        $raw = $response->getResult()->getRaw();
-
-        /** @var DocumentIterator $result */
+        $items = new ArrayCollection();
         foreach ($response->getResult() as $result) {
-            $listView->addItem($result);
+            $items->add($result);
         }
+        $listView->setItems($items);
 
         return $listView;
     }
