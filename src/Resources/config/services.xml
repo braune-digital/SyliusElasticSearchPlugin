@@ -32,6 +32,7 @@
         <service id="sylius_elastic_search.factory.list_view" class="%sylius_elastic_search.factory.list_view.class%">
             <argument type="service" id="doctrine.orm.default_entity_manager" />
             <argument type="service" id="jms_serializer" />
+            <argument type="service" id="event_dispatcher" />
         </service>
 
         <service id="sylius_elastic_search.filter.pager" class="Sylius\ElasticSearchPlugin\Filter\Widget\Pager">

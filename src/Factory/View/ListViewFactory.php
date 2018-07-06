@@ -10,9 +10,12 @@ use JMS\Serializer\SerializationContext;
 use JMS\Serializer\Serializer;
 use ONGR\ElasticsearchBundle\Result\DocumentIterator;
 use ONGR\FilterManagerBundle\Search\SearchResponse;
+use Sylius\ElasticSearchPlugin\Event\ResultViewEvent;
 use Sylius\ElasticSearchPlugin\View\ViewInterface;
 use Sylius\ElasticSearchPlugin\Document\DocumentInterface;
 use Sylius\ElasticSearchPlugin\View\ListView;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -34,14 +37,19 @@ class ListViewFactory implements ListViewFactoryInterface {
     protected $em;
 
     /**
+     * @var EntityManager
+     */
+    protected $eventDispatcher;
+
+    /**
      * ListViewFactory constructor.
      * @param Serializer $serializer
      */
-    public function __construct(EntityManager $em, Serializer $serializer)
+    public function __construct(EntityManager $em, Serializer $serializer, EventDispatcherInterface $eventDispatcher)
     {
         $this->em = $em;
         $this->serializer = $serializer;
-        $this->pa = PropertyAccess::createPropertyAccessor();
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -66,7 +74,10 @@ class ListViewFactory implements ListViewFactoryInterface {
         $listView->setLimit($pager['limit']);
 
         $items = new ArrayCollection();
-        foreach ($response->getResult() as $result) {
+        foreach ($response->getResult() as $i => $result) {
+            $raw = $response->getResult()->getRaw();
+            $hit = $raw['hits']['hits'][$i];
+            $this->eventDispatcher->dispatch(ResultViewEvent::RESULT_VIEW, new ResultViewEvent($hit, $result));
             $items->add($result);
         }
         $listView->setItems($items);
