@@ -33,6 +33,13 @@ class PriceDocument implements DocumentInterface
     protected $currency;
 
     /**
+     * @var string
+     *
+     * @ElasticSearch\Property(type="keyword")
+     */
+    protected $variantCode;
+
+    /**
      * @return int
      */
     public function getAmount(): int
@@ -79,4 +86,21 @@ class PriceDocument implements DocumentInterface
     {
         $this->currency = $currency;
     }
+
+    /**
+     * @return string
+     */
+    public function getVariantCode(): string {
+        return $this->variantCode;
+    }
+
+    /**
+     * @param string $variantCode
+     */
+    public function setVariantCode(string $variantCode): void {
+        $this->variantCode = $variantCode;
+    }
+
+    
+
 }

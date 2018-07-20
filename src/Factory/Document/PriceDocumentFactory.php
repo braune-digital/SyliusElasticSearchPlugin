@@ -31,6 +31,7 @@ final class PriceDocumentFactory implements PriceDocumentFactoryInterface
         $price->setAmount($channelPricing->getPrice());
         $price->setCurrency($currency->getCode());
         $price->setOriginalAmount(null !== $originalAmount && $originalAmount > 0 ? $originalAmount : 0);
+        $price->setVariantCode($channelPricing->getProductVariant()->getCode());
 
         return $price;
     }
