@@ -188,9 +188,8 @@ class ProductDocumentFactory implements ProductDocumentFactoryInterface {
         foreach ($variants as $variant) {
             $channelPrice = $variant->getChannelPricingForChannel($channel);
             if (
-                ($variant->isTracked() && $variant->getOnHold() - $variant->getOnHold(
-                    ) > 0 && $minProductChannelPrice->getPrice() < $channelPrice->getPrice())
-                || (!$variant->isTracked() && $minProductChannelPrice->getPrice() < $channelPrice->getPrice())
+                ($variant->isTracked() && $variant->getOnHand() - $variant->getOnHold() > 0 && $minProductChannelPrice->getPrice() > $channelPrice->getPrice())
+                || (!$variant->isTracked() && $minProductChannelPrice->getPrice() > $channelPrice->getPrice())
             ) {
                 $minProductChannelPrice = $channelPrice;
             }
