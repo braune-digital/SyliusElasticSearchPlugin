@@ -4,6 +4,7 @@
 
     <parameters>
         <parameter key="sylius_elastic_search.factory.product.class">Sylius\ElasticSearchPlugin\Factory\Document\ProductDocumentFactory</parameter>
+        <parameter key="sylius_elastic_search.factory.price.class">Sylius\ElasticSearchPlugin\Factory\Document\PriceDocumentFactory</parameter>
     </parameters>
 
     <services>
@@ -27,7 +28,7 @@
             <argument>%sylius_elastic_search.document.attribute.class%</argument>
         </service>
 
-        <service id="sylius_elastic_search.factory.price" class="Sylius\ElasticSearchPlugin\Factory\Document\PriceDocumentFactory">
+        <service id="sylius_elastic_search.factory.price" class="%sylius_elastic_search.factory.price.class%">
             <argument>%sylius_elastic_search.document.price.class%</argument>
         </service>
 
