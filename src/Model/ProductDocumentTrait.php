@@ -10,6 +10,7 @@ use ONGR\ElasticsearchBundle\Annotation as ElasticSearch;
 use ONGR\ElasticsearchBundle\Result\ObjectIterator;
 use Sylius\ElasticSearchPlugin\Document\ImageDocument;
 use Sylius\ElasticSearchPlugin\Document\PriceDocument;
+use Sylius\ElasticSearchPlugin\Document\PriceDocumentInterface;
 use Sylius\ElasticSearchPlugin\Document\TaxonDocument;
 
 trait ProductDocumentTrait
@@ -89,7 +90,7 @@ trait ProductDocumentTrait
     protected $description;
 
     /**
-     * @var PriceDocument
+     * @var PriceDocumentInterface
      *
      * @ElasticSearch\Embedded(class="Sylius\ElasticSearchPlugin\Document\PriceDocument")
      */
@@ -302,17 +303,17 @@ trait ProductDocumentTrait
     }
 
     /**
-     * @return PriceDocument
+     * @return PriceDocumentInterface
      */
-    public function getPrice(): PriceDocument
+    public function getPrice(): ?PriceDocumentInterface
     {
         return $this->price;
     }
 
     /**
-     * @param PriceDocument $price
+     * @param PriceDocumentInterface $price
      */
-    public function setPrice(PriceDocument $price): void
+    public function setPrice(PriceDocumentInterface $price): void
     {
         $this->price = $price;
     }
