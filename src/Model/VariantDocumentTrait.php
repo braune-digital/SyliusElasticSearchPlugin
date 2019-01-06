@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use ONGR\ElasticsearchBundle\Annotation as ElasticSearch;
 use ONGR\ElasticsearchBundle\Result\ObjectIterator;
 use Sylius\ElasticSearchPlugin\Document\PriceDocument;
+use Sylius\ElasticSearchPlugin\Document\PriceDocumentInterface;
 use Sylius\ElasticSearchPlugin\Document\TaxonDocument;
 
 trait VariantDocumentTrait
@@ -28,7 +29,7 @@ trait VariantDocumentTrait
     protected $images;
 
     /**
-     * @var PriceDocument
+     * @var PriceDocumentInterface
      *
      * @ElasticSearch\Embedded(class="Sylius\ElasticSearchPlugin\Document\PriceDocument")
      */
@@ -108,17 +109,17 @@ trait VariantDocumentTrait
     }
 
     /**
-     * @return PriceDocument
+     * @return PriceDocumentInterface
      */
-    public function getPrice(): PriceDocument
+    public function getPrice(): PriceDocumentInterface
     {
         return $this->price;
     }
 
     /**
-     * @param PriceDocument $price
+     * @param PriceDocumentInterface $price
      */
-    public function setPrice(PriceDocument $price): void
+    public function setPrice(PriceDocumentInterface $price): void
     {
         $this->price = $price;
     }

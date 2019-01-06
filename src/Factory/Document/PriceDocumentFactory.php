@@ -7,6 +7,7 @@ namespace Sylius\ElasticSearchPlugin\Factory\Document;
 use Sylius\Component\Core\Model\ChannelPricingInterface;
 use Sylius\Component\Currency\Model\CurrencyInterface;
 use Sylius\ElasticSearchPlugin\Document\PriceDocument;
+use Sylius\ElasticSearchPlugin\Document\PriceDocumentInterface;
 
 class PriceDocumentFactory implements PriceDocumentFactoryInterface
 {
@@ -23,7 +24,7 @@ class PriceDocumentFactory implements PriceDocumentFactoryInterface
     public function create(
         ChannelPricingInterface $channelPricing,
         CurrencyInterface $currency
-    ): PriceDocument {
+    ): PriceDocumentInterface {
         /** @var PriceDocument $price */
         $price = new $this->priceDocumentClass();
         $originalAmount = $channelPricing->getOriginalPrice();
