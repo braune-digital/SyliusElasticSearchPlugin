@@ -51,7 +51,8 @@ final class VariantDocumentFactory implements VariantDocumentFactoryInterface
 
         /** @var ChannelPricingInterface $channelPricing */
         $channelPricing = $productVariant->getChannelPricingForChannel($channel);
-
+        
+        
         $price = $this->priceDocumentFactory->create(
             $channelPricing,
             $channel->getBaseCurrency()
