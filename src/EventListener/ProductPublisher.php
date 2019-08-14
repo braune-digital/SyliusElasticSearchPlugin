@@ -137,6 +137,7 @@ class ProductPublisher
      */
     protected function getProductFromEntity($entity)
     {
+
         if ($entity instanceof ProductInterface) {
             return new ArrayCollection([$entity]);
         }
@@ -158,6 +159,7 @@ class ProductPublisher
         }
 
         if ($entity instanceof ProductTaxonInterface) {
+
             return $entity->getProduct();
         }
 
