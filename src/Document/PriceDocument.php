@@ -7,7 +7,7 @@ namespace Sylius\ElasticSearchPlugin\Document;
 use ONGR\ElasticsearchBundle\Annotation as ElasticSearch;
 
 /**
- * @ElasticSearch\Object
+ * @ElasticSearch\ObjectType
  */
 class PriceDocument implements PriceDocumentInterface
 {
@@ -101,6 +101,6 @@ class PriceDocument implements PriceDocumentInterface
         $this->variantCode = $variantCode;
     }
 
-    
+
 
 }
